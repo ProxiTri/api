@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WasteContainerModelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,14 @@ class WasteContainerModel
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
+
+    #[ORM\OneToMany(mappedBy: 'wasteContainerModel', targetEntity: Waste::class)]
+    private Collection $wasteContainerModel;
+
+    public function __construct()
+    {
+        $this->wasteContainerModel = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +115,36 @@ class WasteContainerModel
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Waste>
+     */
+    public function getWasteContainerModel(): Collection
+    {
+        return $this->wasteContainerModel;
+    }
+
+    public function addWasteContainerModel(Waste $wasteContainerModel): self
+    {
+        if (!$this->wasteContainerModel->contains($wasteContainerModel)) {
+            $this->wasteContainerModel->add($wasteContainerModel);
+            $wasteContainerModel->setWasteContainerModel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWasteContainerModel(Waste $wasteContainerModel): self
+    {
+        if ($this->wasteContainerModel->removeElement($wasteContainerModel)) {
+            // set the owning side to null (unless already changed)
+            if ($wasteContainerModel->getWasteContainerModel() === $this) {
+                $wasteContainerModel->setWasteContainerModel(null);
+            }
+        }
 
         return $this;
     }

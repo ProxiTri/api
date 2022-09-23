@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220923140313 extends AbstractMigration
+final class Version20220923143315 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,6 +27,7 @@ final class Version20220923140313 extends AbstractMigration
         $this->addSql('CREATE TABLE report (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, localisation_name VARCHAR(255) DEFAULT NULL, localisation_number VARCHAR(255) DEFAULT NULL, localisation_longitude VARCHAR(255) DEFAULT NULL, localisation_latitude VARCHAR(255) DEFAULT NULL, message LONGTEXT DEFAULT NULL, image LONGTEXT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, INDEX IDX_C42F7784A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE secteur (id INT AUTO_INCREMENT NOT NULL, comune_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, INDEX IDX_8045251F885878B0 (comune_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, age INT DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, img_profile LONGTEXT DEFAULT NULL, is_ban TINYINT(1) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE waste (id INT AUTO_INCREMENT NOT NULL, waste_type_id INT DEFAULT NULL, waste_container_model_id INT DEFAULT NULL, localisation_city_id_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, serial_number VARCHAR(255) DEFAULT NULL, install_first_date DATETIME DEFAULT NULL, install_new_date DATETIME DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, INDEX IDX_2E76A48821B47B45 (waste_type_id), INDEX IDX_2E76A4884E480D4F (waste_container_model_id), INDEX IDX_2E76A488FFB68FC4 (localisation_city_id_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE waste_container_model (id INT AUTO_INCREMENT NOT NULL, model_name VARCHAR(255) DEFAULT NULL, model_manu_facturer VARCHAR(255) DEFAULT NULL, model_useful_capacity INT DEFAULT NULL, model_type VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE waste_type (id INT AUTO_INCREMENT NOT NULL, designation VARCHAR(255) DEFAULT NULL, density DOUBLE PRECISION DEFAULT NULL, customer_designation VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE chat ADD CONSTRAINT FK_659DF2AAA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
@@ -34,6 +35,9 @@ final class Version20220923140313 extends AbstractMigration
         $this->addSql('ALTER TABLE recycling_center ADD CONSTRAINT FK_4AC94F29885878B0 FOREIGN KEY (comune_id) REFERENCES comune (id)');
         $this->addSql('ALTER TABLE report ADD CONSTRAINT FK_C42F7784A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE secteur ADD CONSTRAINT FK_8045251F885878B0 FOREIGN KEY (comune_id) REFERENCES comune (id)');
+        $this->addSql('ALTER TABLE waste ADD CONSTRAINT FK_2E76A48821B47B45 FOREIGN KEY (waste_type_id) REFERENCES waste_type (id)');
+        $this->addSql('ALTER TABLE waste ADD CONSTRAINT FK_2E76A4884E480D4F FOREIGN KEY (waste_container_model_id) REFERENCES waste_container_model (id)');
+        $this->addSql('ALTER TABLE waste ADD CONSTRAINT FK_2E76A488FFB68FC4 FOREIGN KEY (localisation_city_id_id) REFERENCES comune (id)');
     }
 
     public function down(Schema $schema): void
@@ -44,6 +48,9 @@ final class Version20220923140313 extends AbstractMigration
         $this->addSql('ALTER TABLE recycling_center DROP FOREIGN KEY FK_4AC94F29885878B0');
         $this->addSql('ALTER TABLE report DROP FOREIGN KEY FK_C42F7784A76ED395');
         $this->addSql('ALTER TABLE secteur DROP FOREIGN KEY FK_8045251F885878B0');
+        $this->addSql('ALTER TABLE waste DROP FOREIGN KEY FK_2E76A48821B47B45');
+        $this->addSql('ALTER TABLE waste DROP FOREIGN KEY FK_2E76A4884E480D4F');
+        $this->addSql('ALTER TABLE waste DROP FOREIGN KEY FK_2E76A488FFB68FC4');
         $this->addSql('DROP TABLE chat');
         $this->addSql('DROP TABLE comune');
         $this->addSql('DROP TABLE passage');
@@ -51,6 +58,7 @@ final class Version20220923140313 extends AbstractMigration
         $this->addSql('DROP TABLE report');
         $this->addSql('DROP TABLE secteur');
         $this->addSql('DROP TABLE user');
+        $this->addSql('DROP TABLE waste');
         $this->addSql('DROP TABLE waste_container_model');
         $this->addSql('DROP TABLE waste_type');
     }

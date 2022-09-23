@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WasteTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,14 @@ class WasteType
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
+
+    #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Waste::class)]
+    private Collection $wastes;
+
+    public function __construct()
+    {
+        $this->wastes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,36 @@ class WasteType
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Waste>
+     */
+    public function getWastes(): Collection
+    {
+        return $this->wastes;
+    }
+
+    public function addWaste(Waste $waste): self
+    {
+        if (!$this->wastes->contains($waste)) {
+            $this->wastes->add($waste);
+            $waste->setWasteType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWaste(Waste $waste): self
+    {
+        if ($this->wastes->removeElement($waste)) {
+            // set the owning side to null (unless already changed)
+            if ($waste->getWasteType() === $this) {
+                $waste->setWasteType(null);
+            }
+        }
 
         return $this;
     }

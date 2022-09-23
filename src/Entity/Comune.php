@@ -40,10 +40,14 @@ class Comune
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: Secteur::class)]
     private Collection $secteurs;
 
+    #[ORM\OneToMany(mappedBy: 'localisationCityId', targetEntity: Waste::class)]
+    private Collection $wasteCity;
+
     public function __construct()
     {
         $this->recyclingCenters = new ArrayCollection();
         $this->secteurs = new ArrayCollection();
+        $this->wasteCity = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,6 +181,36 @@ class Comune
             // set the owning side to null (unless already changed)
             if ($secteur->getComuneId() === $this) {
                 $secteur->setComuneId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Waste>
+     */
+    public function getWasteCity(): Collection
+    {
+        return $this->wasteCity;
+    }
+
+    public function addWasteCity(Waste $wasteCity): self
+    {
+        if (!$this->wasteCity->contains($wasteCity)) {
+            $this->wasteCity->add($wasteCity);
+            $wasteCity->setLocalisationCityId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWasteCity(Waste $wasteCity): self
+    {
+        if ($this->wasteCity->removeElement($wasteCity)) {
+            // set the owning side to null (unless already changed)
+            if ($wasteCity->getLocalisationCityId() === $this) {
+                $wasteCity->setLocalisationCityId(null);
             }
         }
 
