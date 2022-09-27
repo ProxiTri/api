@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
+#[ApiResource]
 class Report
 {
     #[ORM\Id]
