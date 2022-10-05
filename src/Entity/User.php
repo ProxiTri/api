@@ -2,41 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(
-    collectionOperations: [
-        'GET',
-        'POST' => [
-            'method' => 'POST',
-            'path' => '/users/add'
-        ]
-    ],
-    itemOperations: [
-        'GET' => [
-            'method' => 'GET',
-            'normalization_context' => [
-                'groups' => ['user.read']
-            ]
-        ],
-        'PUT' => [
-            'method' => 'PUT',
-            'normalization_context' => [
-                'groups' => ['user.write']
-            ]
-        ],
-        'delete'
-    ]
-)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -44,6 +18,14 @@ class User
     #[Groups(['user.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user.read', 'user.write'])]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    #[Groups(['user.read'])]
+    private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user.read'])]
@@ -56,14 +38,6 @@ class User
     #[ORM\Column(nullable: true)]
     #[Groups(['user.read'])]
     private ?int $age = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user.read'])]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user.read'])]
-    private ?string $password = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['user.read'])]
@@ -89,11 +63,11 @@ class User
     #[Groups(['user.read'])]
     private Collection $reports;
 
-    public function __construct()
-    {
-        $this->chats = new ArrayCollection();
-        $this->reports = new ArrayCollection();
-    }
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     public function getId(): ?int
     {
@@ -141,21 +115,9 @@ class User
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(?string $password): self
-    {
-        $this->password = $password;
 
         return $this;
     }
@@ -266,5 +228,58 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
