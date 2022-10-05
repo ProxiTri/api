@@ -3,52 +3,90 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/users/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['user.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['user.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $first_name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user.read'])]
     private ?int $age = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $img_profile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user.read'])]
     private ?bool $is_ban = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['user.read'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['user.read'])]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Chat::class)]
+    #[Groups(['user.read'])]
     private Collection $chats;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
+    #[Groups(['user.read'])]
     private Collection $reports;
 
     public function __construct()

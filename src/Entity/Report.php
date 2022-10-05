@@ -3,44 +3,80 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/reports/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['report.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['report.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class Report
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['report.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[Groups(['report.read', 'report.write'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $localisationName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $localisationNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $localisationLongitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $localisationLatitude = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $message = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['report.read', 'report.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int

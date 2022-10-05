@@ -3,46 +3,90 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\ComuneRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ComuneRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET' => [
+          'method' => 'GET',
+          'path' => '/communes'
+        ],
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/communes/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'path' => '/communes/{id}',
+            'normalization_context' => [
+                'groups' => ['commune.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'path' => '/communes/{id}',
+            'normalization_context' => [
+                'groups' => ['commune.write']
+            ]
+        ],
+        'delete' => [
+            'method' => 'DELETE',
+            'path' => '/communes/{id}'
+        ]
+    ]
+)]
 class Comune
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['commune.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?int $localisationPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?string $localisationCountry = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?int $localisationTownId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['commune.read', 'commune.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: RecyclingCenter::class)]
+    #[Groups(['commune.read', 'commune.write'])]
     private Collection $recyclingCenters;
 
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: Secteur::class)]
+    #[Groups(['commune.read', 'commune.write'])]
     private Collection $secteurs;
 
     #[ORM\OneToMany(mappedBy: 'localisationCityId', targetEntity: Waste::class)]
+    #[Groups(['commune.read', 'commune.write'])]
     private Collection $wasteCity;
 
     public function __construct()
