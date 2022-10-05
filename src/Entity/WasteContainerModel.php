@@ -3,40 +3,74 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\WasteContainerModelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WasteContainerModelRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/waste_container_models/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['wastecontainermodel.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['wastecontainermodel.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class WasteContainerModel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['wastecontainermodel.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?string $modelName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?string $modelManuFacturer = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?int $modelUsefulCapacity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?string $modelType = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'wasteContainerModel', targetEntity: Waste::class)]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private Collection $wasteContainerModel;
 
     public function __construct()

@@ -3,44 +3,80 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\WasteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WasteRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/wastes/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['waste.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['waste.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class Waste
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['waste.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?string $serialNumber = null;
 
     #[ORM\ManyToOne(inversedBy: 'wastes')]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?WasteType $wasteType = null;
 
     #[ORM\ManyToOne(inversedBy: 'wasteContainerModel')]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?WasteContainerModel $wasteContainerModel = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?\DateTimeInterface $installFirstDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?\DateTimeInterface $installNewDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'wasteCity')]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?Comune $localisationCityId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
