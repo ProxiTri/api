@@ -3,37 +3,70 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\WasteTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WasteTypeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/waste_types/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['wastetype.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['wastetype.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class WasteType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['wastetype.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?string $designation = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?float $density = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?string $customerDesignation = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Waste::class)]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     private Collection $wastes;
 
     public function __construct()

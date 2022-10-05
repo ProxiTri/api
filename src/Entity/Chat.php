@@ -4,32 +4,63 @@ namespace App\Entity;
 
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\ChatRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ChatRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/chats/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['chat.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['chat.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class Chat
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['chat.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'chats')]
+    #[Groups(['chat.read', 'chat.write'])]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['chat.read', 'chat.write'])]
     private ?string $message = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $is_report = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['chat.read', 'chat.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['chat.read', 'chat.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int

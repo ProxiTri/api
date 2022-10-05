@@ -3,34 +3,66 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\SecteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'GET',
+        'POST' => [
+            'method' => 'POST',
+            'path' => '/secteurs/add'
+        ]
+    ],
+    itemOperations: [
+        'GET' => [
+            'method' => 'GET',
+            'normalization_context' => [
+                'groups' => ['secteur.read']
+            ]
+        ],
+        'PUT' => [
+            'method' => 'PUT',
+            'normalization_context' => [
+                'groups' => ['secteur.write']
+            ]
+        ],
+        'delete'
+    ]
+)]
 class Secteur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['secteur.read'])]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['secteur.read', 'secteur.write'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'secteurs')]
+    #[Groups(['secteur.read', 'secteur.write'])]
     private ?Comune $comune = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['secteur.read', 'secteur.write'])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['secteur.read', 'secteur.write'])]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'secteurs', targetEntity: Passage::class)]
+    #[Groups(['secteur.read', 'secteur.write'])]
     private Collection $passages;
 
     public function __construct()
