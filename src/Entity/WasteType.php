@@ -41,7 +41,7 @@ class WasteType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['wastetype.read'])]
+    #[Groups(['wastetype.read', 'wastetype.write'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
