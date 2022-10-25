@@ -22,21 +22,21 @@ class RegistrationController extends AbstractController
     public function register(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
         $user = new User();
-//        dd($request);
-        $user->setEmail($request->get('email'));
+        $data = json_decode($request->getContent(), true);
+        $user->setEmail($data['email']);
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
-            $request->get('password')
+            $data['password']
         );
         $user->setPassword($hashedPassword);
         $user->setRoles(['ROLE_USER']);
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
 
+
         $em = $doctrine->getManager();
         $em->persist($user);
         $em->flush();
-
-        return new JsonResponse($user);
+        return new JsonResponse("Compte crée avec succès ! ID du compte : " . $user->getUserIdentifier(), 201);
     }
 }
