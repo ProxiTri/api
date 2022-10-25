@@ -10,9 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -50,6 +49,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user.read', 'user.write'])]
+    #[Assert\NotBlank(message: 'L\'email est obligatoire')]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide.'
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -59,6 +62,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(
+        message: 'Le mot de passe ne peut pas être vide.'
+    )]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -82,11 +92,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isBan = null;
 
     #[ORM\Column]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Chat::class)]
@@ -96,6 +106,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
     #[Groups(['user.read'])]
     private Collection $reports;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

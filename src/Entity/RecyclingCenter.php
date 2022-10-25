@@ -8,6 +8,7 @@ use App\Repository\RecyclingCenterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecyclingCenterRepository::class)]
 #[ApiResource(
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/recyling_centers/add'
+            'path' => '/recycling_centers/add'
         ]
     ],
     itemOperations: [
@@ -45,15 +46,17 @@ class RecyclingCenter
 
     #[ORM\ManyToOne(inversedBy: 'recyclingCenters')]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    private ?string $buisness_hours = null;
+    private ?string $business_hours = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
@@ -63,13 +66,19 @@ class RecyclingCenter
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
     private ?float $longitude = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['recyclingcenter.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['recyclingcenter.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -100,14 +109,14 @@ class RecyclingCenter
         return $this;
     }
 
-    public function getBuisnessHours(): ?string
+    public function getBusinessHours(): ?string
     {
-        return $this->buisness_hours;
+        return $this->business_hours;
     }
 
-    public function setBuisnessHours(?string $buisness_hours): self
+    public function setBusinessHours(?string $business_hours): self
     {
-        $this->buisness_hours = $buisness_hours;
+        $this->business_hours = $business_hours;
 
         return $this;
     }

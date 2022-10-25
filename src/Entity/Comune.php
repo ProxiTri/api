@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ComuneRepository::class)]
 #[ApiResource(
@@ -55,6 +56,7 @@ class Comune
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['commune.read', 'commune.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
@@ -69,13 +71,13 @@ class Comune
     #[Groups(['commune.read', 'commune.write'])]
     private ?int $localisationTownId = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['commune.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['commune.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: RecyclingCenter::class)]
     #[Groups(['commune.read', 'commune.write'])]
@@ -85,15 +87,16 @@ class Comune
     #[Groups(['commune.read', 'commune.write'])]
     private Collection $secteurs;
 
-    #[ORM\OneToMany(mappedBy: 'localisationCityId', targetEntity: Waste::class)]
-    #[Groups(['commune.read', 'commune.write'])]
-    private Collection $wasteCity;
+    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: Waste::class)]
+    private Collection $wastes;
 
     public function __construct()
     {
         $this->recyclingCenters = new ArrayCollection();
         $this->secteurs = new ArrayCollection();
-        $this->wasteCity = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+        $this->wastes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,27 +239,27 @@ class Comune
     /**
      * @return Collection<int, Waste>
      */
-    public function getWasteCity(): Collection
+    public function getWastes(): Collection
     {
-        return $this->wasteCity;
+        return $this->wastes;
     }
 
-    public function addWasteCity(Waste $wasteCity): self
+    public function addWaste(Waste $waste): self
     {
-        if (!$this->wasteCity->contains($wasteCity)) {
-            $this->wasteCity->add($wasteCity);
-            $wasteCity->setLocalisationCityId($this);
+        if (!$this->wastes->contains($waste)) {
+            $this->wastes->add($waste);
+            $waste->setCommune($this);
         }
 
         return $this;
     }
 
-    public function removeWasteCity(Waste $wasteCity): self
+    public function removeWaste(Waste $waste): self
     {
-        if ($this->wasteCity->removeElement($wasteCity)) {
+        if ($this->wastes->removeElement($waste)) {
             // set the owning side to null (unless already changed)
-            if ($wasteCity->getLocalisationCityId() === $this) {
-                $wasteCity->setLocalisationCityId(null);
+            if ($waste->getCommune() === $this) {
+                $waste->setCommune(null);
             }
         }
 

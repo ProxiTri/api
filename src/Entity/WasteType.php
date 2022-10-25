@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WasteTypeRepository::class)]
 #[ApiResource(
@@ -57,21 +58,26 @@ class WasteType
     #[Groups(['wastetype.read', 'wastetype.write'])]
     private ?string $customerDesignation = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['wastetype.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['wastetype.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Waste::class)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
     private Collection $wastes;
+
+    #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Passage::class)]
+    private Collection $passages;
 
     public function __construct()
     {
         $this->wastes = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+        $this->passages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +169,36 @@ class WasteType
             // set the owning side to null (unless already changed)
             if ($waste->getWasteType() === $this) {
                 $waste->setWasteType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Passage>
+     */
+    public function getPassages(): Collection
+    {
+        return $this->passages;
+    }
+
+    public function addPassage(Passage $passage): self
+    {
+        if (!$this->passages->contains($passage)) {
+            $this->passages->add($passage);
+            $passage->setWasteType($this);
+        }
+
+        return $this;
+    }
+
+    public function removePassage(Passage $passage): self
+    {
+        if ($this->passages->removeElement($passage)) {
+            // set the owning side to null (unless already changed)
+            if ($passage->getWasteType() === $this) {
+                $passage->setWasteType(null);
             }
         }
 

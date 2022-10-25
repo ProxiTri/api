@@ -8,6 +8,8 @@ use App\Repository\WasteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: WasteRepository::class)]
 #[ApiResource(
@@ -45,6 +47,7 @@ class Waste
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -61,23 +64,46 @@ class Waste
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $installFirstDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $installNewDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'wasteCity')]
-    #[Groups(['waste.read', 'waste.write'])]
-    private ?Comune $localisationCityId = null;
+    #[ORM\ManyToOne(inversedBy: 'wastes')]
+    #[Groups(['waste.read'])]
+    private ?Comune $commune = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
-    private ?\DateTimeInterface $created_at = null;
+    private ?string $localisationName = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
-    private ?\DateTimeInterface $updated_at = null;
+    private ?string $localisationStreet = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
+    private ?float $localisationLatitude = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
+    private ?float $localisationLongitude = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['waste.read'])]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['waste.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    public function __construct() {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -156,18 +182,6 @@ class Waste
         return $this;
     }
 
-    public function getLocalisationCityId(): ?Comune
-    {
-        return $this->localisationCityId;
-    }
-
-    public function setLocalisationCityId(?Comune $localisationCityId): self
-    {
-        $this->localisationCityId = $localisationCityId;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -188,6 +202,66 @@ class Waste
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getCommune(): ?Comune
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?Comune $commune): self
+    {
+        $this->commune = $commune;
+
+        return $this;
+    }
+
+    public function getLocalisationName(): ?string
+    {
+        return $this->localisationName;
+    }
+
+    public function setLocalisationName(string $localisationName): self
+    {
+        $this->localisationName = $localisationName;
+
+        return $this;
+    }
+
+    public function getLocalisationStreet(): ?string
+    {
+        return $this->localisationStreet;
+    }
+
+    public function setLocalisationStreet(string $localisationStreet): self
+    {
+        $this->localisationStreet = $localisationStreet;
+
+        return $this;
+    }
+
+    public function getLocalisationLatitude(): ?float
+    {
+        return $this->localisationLatitude;
+    }
+
+    public function setLocalisationLatitude(float $localisationLatitude): self
+    {
+        $this->localisationLatitude = $localisationLatitude;
+
+        return $this;
+    }
+
+    public function getLocalisationLongitude(): ?float
+    {
+        return $this->localisationLongitude;
+    }
+
+    public function setLocalisationLongitude(float $localisationLongitude): self
+    {
+        $this->localisationLongitude = $localisationLongitude;
 
         return $this;
     }

@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
 #[ApiResource(
@@ -47,19 +48,21 @@ class Secteur
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'secteurs')]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write'])]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['secteur.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write'])]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['secteur.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'secteurs', targetEntity: Passage::class)]
     #[Groups(['secteur.read', 'secteur.write'])]
@@ -68,6 +71,8 @@ class Secteur
     public function __construct()
     {
         $this->passages = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
