@@ -8,6 +8,7 @@ use App\Repository\PassageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PassageRepository::class)]
 #[ApiResource(
@@ -45,10 +46,12 @@ class Passage
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['passage.read', 'passage.write'])]
+    #[Assert\NotBlank(message: 'L\'heure de passage est obligatoire')]
     private ?string $hours = null;
 
     #[ORM\ManyToOne(inversedBy: 'passages')]
     #[Groups(['passage.read', 'passage.write'])]
+    #[Assert\NotBlank(message: 'Le secteur est obligatoire')]
     private ?Secteur $secteur = null;
 
     public function getId(): ?int

@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ComuneRepository::class)]
 #[ApiResource(
@@ -55,6 +56,7 @@ class Comune
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['commune.read', 'commune.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
@@ -71,10 +73,12 @@ class Comune
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['commune.read', 'commune.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['commune.read', 'commune.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: RecyclingCenter::class)]

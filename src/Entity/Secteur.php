@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
 #[ApiResource(
@@ -47,18 +48,22 @@ class Secteur
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'secteurs')]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['secteur.read', 'secteur.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'secteurs', targetEntity: Passage::class)]

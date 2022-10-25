@@ -9,6 +9,7 @@ use App\Repository\ChatRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChatRepository::class)]
 #[ApiResource(
@@ -46,10 +47,12 @@ class Chat
 
     #[ORM\ManyToOne(inversedBy: 'chats')]
     #[Groups(['chat.read', 'chat.write'])]
+    #[Assert\NotBlank(message: 'L\'utilisateur est obligatoire')]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['chat.read', 'chat.write'])]
+    #[Assert\NotBlank(message: 'Le message est obligatoire')]
     private ?string $message = null;
 
     #[ORM\Column(nullable: true)]
@@ -57,10 +60,12 @@ class Chat
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['chat.read', 'chat.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['chat.read', 'chat.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int

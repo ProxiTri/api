@@ -8,6 +8,7 @@ use App\Repository\RecyclingCenterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecyclingCenterRepository::class)]
 #[ApiResource(
@@ -45,10 +46,12 @@ class RecyclingCenter
 
     #[ORM\ManyToOne(inversedBy: 'recyclingCenters')]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -65,10 +68,12 @@ class RecyclingCenter
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
