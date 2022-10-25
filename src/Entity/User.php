@@ -49,19 +49,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user.read', 'user.write'])]
-    #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\NotBlank(message: 'L\'email est obligatoire')]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide.'
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(
+        message: 'Le mot de passe ne peut pas être vide.'
+    )]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -86,13 +93,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups(['user.read', 'user.write'])]
-    #[Assert\NotBlank]
-    #[Assert\DateTime]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Assert\DateTime]
     #[Groups(['user.read', 'user.write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
