@@ -93,10 +93,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups(['user.read', 'user.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     #[Groups(['user.read', 'user.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Chat::class)]

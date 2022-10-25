@@ -8,6 +8,7 @@ use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
 #[ApiResource(
@@ -45,6 +46,7 @@ class Report
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     #[Groups(['report.read', 'report.write'])]
+    #[Assert\NotBlank(message: 'L\'utilisateur est obligatoire')]
     private ?User $user = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -65,6 +67,7 @@ class Report
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['report.read', 'report.write'])]
+    #[Assert\NotBlank(message: 'Le message est obligatoire')]
     private ?string $message = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -73,10 +76,12 @@ class Report
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['report.read', 'report.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['report.read', 'report.write'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
