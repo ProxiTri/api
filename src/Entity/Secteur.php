@@ -56,15 +56,13 @@ class Secteur
     #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['secteur.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['secteur.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'secteurs', targetEntity: Passage::class)]
     #[Groups(['secteur.read', 'secteur.write'])]
@@ -73,6 +71,8 @@ class Secteur
     public function __construct()
     {
         $this->passages = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

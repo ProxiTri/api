@@ -71,15 +71,13 @@ class Comune
     #[Groups(['commune.read', 'commune.write'])]
     private ?int $localisationTownId = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['commune.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['commune.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'comune', targetEntity: RecyclingCenter::class)]
     #[Groups(['commune.read', 'commune.write'])]
@@ -98,6 +96,8 @@ class Comune
         $this->recyclingCenters = new ArrayCollection();
         $this->secteurs = new ArrayCollection();
         $this->wasteCity = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/recyling_centers/add'
+            'path' => '/recycling_centers/add'
         ]
     ],
     itemOperations: [
@@ -56,7 +56,7 @@ class RecyclingCenter
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    private ?string $buisness_hours = null;
+    private ?string $business_hours = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
@@ -66,15 +66,19 @@ class RecyclingCenter
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
     private ?float $longitude = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['recyclingcenter.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['recyclingcenter.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -105,14 +109,14 @@ class RecyclingCenter
         return $this;
     }
 
-    public function getBuisnessHours(): ?string
+    public function getBusinessHours(): ?string
     {
-        return $this->buisness_hours;
+        return $this->business_hours;
     }
 
-    public function setBuisnessHours(?string $buisness_hours): self
+    public function setBusinessHours(?string $business_hours): self
     {
-        $this->buisness_hours = $buisness_hours;
+        $this->business_hours = $business_hours;
 
         return $this;
     }
