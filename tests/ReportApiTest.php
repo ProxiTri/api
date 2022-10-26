@@ -4,12 +4,12 @@ namespace App\Tests;
 
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class ChatApiTest extends AbstractApi
+class ReportApiTest extends AbstractApi
 {
 
     public function testIndexNotConnected(): void
     {
-        $response = static::createClient()->request('GET', '/api/chats');
+        $response = static::createClient()->request('GET', '/api/reports');
 
         $this->assertResponseStatusCodeSame(401);
     }
@@ -20,20 +20,24 @@ class ChatApiTest extends AbstractApi
      */
     public function testIndexConnected(): void
     {
-        $response = $this->getClient()->request('GET', '/api/chats');
+        $response = $this->getClient()->request('GET', '/api/reports');
 
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testPostNotConnected(): void
     {
-        $response = static::createClient()->request('POST', '/api/chats/add', [
+        $response = static::createClient()->request('POST', '/api/reports/add', [
             'json' => [
+                'localisationName' => 'test',
+                'localisationNumber' => 'test',
+                'localisationLongitude' => 'test',
+                'localisationLatitude' => 'test',
                 'message' => 'test',
+                'image' => 'test',
                 'userId' => [
                     '/api/users/1'
                 ],
-                'isReport' => true,
             ]
         ]);
 
@@ -42,13 +46,17 @@ class ChatApiTest extends AbstractApi
 
     public function testPostConnected(): void
     {
-        $response = $this->getClient()->request('POST', '/api/chats/add', [
+        $response = $this->getClient()->request('POST', '/api/reports/add', [
             'json' => [
+                'localisationName' => 'test',
+                'localisationNumber' => 'test',
+                'localisationLongitude' => 'test',
+                'localisationLatitude' => 'test',
                 'message' => 'test',
+                'image' => 'test',
                 'userId' => [
                     '/api/users/1'
                 ],
-                'isReport' => true,
             ]
         ]);
 
@@ -57,27 +65,31 @@ class ChatApiTest extends AbstractApi
 
     public function testGetOnePostNotConnected(): void
     {
-        $response = static::createClient()->request('GET', '/api/chats/1');
+        $response = static::createClient()->request('GET', '/api/reports/1');
 
         $this->assertResponseStatusCodeSame(401);
     }
 
     public function testGetOnePostConnected(): void
     {
-        $response = $this->getClient()->request('GET', '/api/chats/1');
+        $response = $this->getClient()->request('GET', '/api/reports/1');
 
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testPutNotConnected(): void
     {
-        $response = static::createClient()->request('PUT', '/api/chats/1', [
+        $response = static::createClient()->request('PUT', '/api/reports/1', [
             'json' => [
+                'localisationName' => 'test',
+                'localisationNumber' => 'test',
+                'localisationLongitude' => 'test',
+                'localisationLatitude' => 'test',
                 'message' => 'test',
+                'image' => 'test',
                 'userId' => [
                     '/api/users/1'
                 ],
-                'isReport' => true,
             ]
         ]);
 
@@ -86,13 +98,17 @@ class ChatApiTest extends AbstractApi
 
     public function testPutConnected(): void
     {
-        $response = $this->getClient()->request('PUT', '/api/chats/1', [
+        $response = $this->getClient()->request('PUT', '/api/reports/1', [
             'json' => [
+                'localisationName' => 'test',
+                'localisationNumber' => 'test',
+                'localisationLongitude' => 'test',
+                'localisationLatitude' => 'test',
                 'message' => 'test',
+                'image' => 'test',
                 'userId' => [
                     '/api/users/1'
                 ],
-                'isReport' => true,
             ]
         ]);
 
@@ -101,14 +117,14 @@ class ChatApiTest extends AbstractApi
 
     public function testDeleteNotConnected(): void
     {
-        $response = static::createClient()->request('DELETE', '/api/chats/1');
+        $response = static::createClient()->request('DELETE', '/api/reports/1');
 
         $this->assertResponseStatusCodeSame(401);
     }
 
     public function testDeleteConnected(): void
     {
-        $response = $this->getClient()->request('DELETE', '/api/chats/1');
+        $response = $this->getClient()->request('DELETE', '/api/reports/1');
 
         $this->assertResponseStatusCodeSame(200);
     }

@@ -4,12 +4,12 @@ namespace App\Tests;
 
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class ChatApiTest extends AbstractApi
+class PassageApiTest extends AbstractApi
 {
 
     public function testIndexNotConnected(): void
     {
-        $response = static::createClient()->request('GET', '/api/chats');
+        $response = static::createClient()->request('GET', '/api/passages');
 
         $this->assertResponseStatusCodeSame(401);
     }
@@ -20,20 +20,17 @@ class ChatApiTest extends AbstractApi
      */
     public function testIndexConnected(): void
     {
-        $response = $this->getClient()->request('GET', '/api/chats');
+        $response = $this->getClient()->request('GET', '/api/passages');
 
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testPostNotConnected(): void
     {
-        $response = static::createClient()->request('POST', '/api/chats/add', [
+        $response = static::createClient()->request('POST', '/api/passages/add', [
             'json' => [
-                'message' => 'test',
-                'userId' => [
-                    '/api/users/1'
-                ],
-                'isReport' => true,
+                'hours' => '11h33',
+                'secteurId' => 'secteurname',
             ]
         ]);
 
@@ -42,13 +39,10 @@ class ChatApiTest extends AbstractApi
 
     public function testPostConnected(): void
     {
-        $response = $this->getClient()->request('POST', '/api/chats/add', [
+        $response = $this->getClient()->request('POST', '/api/passages/add', [
             'json' => [
-                'message' => 'test',
-                'userId' => [
-                    '/api/users/1'
-                ],
-                'isReport' => true,
+                'hours' => '11h33',
+                'secteurId' => 'secteurname',
             ]
         ]);
 
@@ -57,27 +51,24 @@ class ChatApiTest extends AbstractApi
 
     public function testGetOnePostNotConnected(): void
     {
-        $response = static::createClient()->request('GET', '/api/chats/1');
+        $response = static::createClient()->request('GET', '/api/passages/1');
 
         $this->assertResponseStatusCodeSame(401);
     }
 
     public function testGetOnePostConnected(): void
     {
-        $response = $this->getClient()->request('GET', '/api/chats/1');
+        $response = $this->getClient()->request('GET', '/api/passages/1');
 
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testPutNotConnected(): void
     {
-        $response = static::createClient()->request('PUT', '/api/chats/1', [
+        $response = static::createClient()->request('PUT', '/api/passages/1', [
             'json' => [
-                'message' => 'test',
-                'userId' => [
-                    '/api/users/1'
-                ],
-                'isReport' => true,
+                'hours' => '11h33',
+                'secteurId' => 'secteurname',
             ]
         ]);
 
@@ -86,13 +77,10 @@ class ChatApiTest extends AbstractApi
 
     public function testPutConnected(): void
     {
-        $response = $this->getClient()->request('PUT', '/api/chats/1', [
+        $response = $this->getClient()->request('PUT', '/api/passages/1', [
             'json' => [
-                'message' => 'test',
-                'userId' => [
-                    '/api/users/1'
-                ],
-                'isReport' => true,
+                'hours' => '11h33',
+                'secteurId' => 'secteurname',
             ]
         ]);
 
@@ -101,14 +89,14 @@ class ChatApiTest extends AbstractApi
 
     public function testDeleteNotConnected(): void
     {
-        $response = static::createClient()->request('DELETE', '/api/chats/1');
+        $response = static::createClient()->request('DELETE', '/api/passages/1');
 
         $this->assertResponseStatusCodeSame(401);
     }
 
     public function testDeleteConnected(): void
     {
-        $response = $this->getClient()->request('DELETE', '/api/chats/1');
+        $response = $this->getClient()->request('DELETE', '/api/passages/1');
 
         $this->assertResponseStatusCodeSame(200);
     }
