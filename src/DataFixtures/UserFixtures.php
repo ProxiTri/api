@@ -32,5 +32,19 @@ class UserFixtures extends Fixture
 
         $manager->persist($user);
         $manager->flush();
+
+        $user2 = new User();
+        $user2->setEmail($_ENV['ADMIN_EMAIL']. 'test');
+        $hashedPassword = $this->userPasswordHasherInterface->hashPassword(
+            $user2,
+            $_ENV['ADMIN_PASSWORD'].'test'
+        );
+        $user2->setPassword($hashedPassword);
+        $user2->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user2->setCreatedAt(new \DateTimeImmutable());
+        $user2->setUpdatedAt(new \DateTimeImmutable());
+
+        $manager->persist($user2);
+        $manager->flush();
     }
 }
