@@ -92,13 +92,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isBan = null;
 
     #[ORM\Column]
-    #[Groups(['user.read', 'user.write'])]
-    #[Assert\DateTime]
+    #[Groups(['user.read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['user.read', 'user.write'])]
-    #[Assert\DateTime]
+    #[Groups(['user.read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Chat::class)]
@@ -108,6 +106,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
     #[Groups(['user.read'])]
     private Collection $reports;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

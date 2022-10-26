@@ -63,23 +63,22 @@ class WasteContainerModel
     #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private ?string $modelType = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['wastecontainermodel.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['wastecontainermodel.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'wasteContainerModel', targetEntity: Waste::class)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
     private Collection $wasteContainerModel;
 
     public function __construct()
     {
         $this->wasteContainerModel = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

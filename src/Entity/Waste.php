@@ -75,15 +75,18 @@ class Waste
     #[Groups(['waste.read', 'waste.write'])]
     private ?Comune $localisationCityId = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['waste.read', 'waste.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['waste.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['waste.read', 'waste.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['waste.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    public function __construct() {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

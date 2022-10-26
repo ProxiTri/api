@@ -58,15 +58,13 @@ class Chat
     #[ORM\Column(nullable: true)]
     private ?bool $is_report = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['chat.read', 'chat.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['chat.read'])]
+    private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['chat.read', 'chat.write'])]
-    #[Assert\DateTime]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['chat.read'])]
+    private ?\DateTimeImmutable $updated_at = null;
 
     public function getId(): ?int
     {
