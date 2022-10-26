@@ -16,6 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Symfony runtime
+      run: composer require symfony/runtime
       
     - name: Run Tests
       run: php bin/console phpunit
