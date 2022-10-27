@@ -71,9 +71,25 @@ class Waste
     #[Assert\DateTime]
     private ?\DateTimeInterface $installNewDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'wasteCity')]
+    #[ORM\ManyToOne(inversedBy: 'wastes')]
+    #[Groups(['waste.read'])]
+    private ?Comune $commune = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
-    private ?Comune $localisationCityId = null;
+    private ?string $localisationName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
+    private ?string $localisationStreet = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
+    private ?float $localisationLatitude = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['waste.read', 'waste.write'])]
+    private ?float $localisationLongitude = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups(['waste.read'])]
@@ -165,18 +181,6 @@ class Waste
         return $this;
     }
 
-    public function getLocalisationCityId(): ?Comune
-    {
-        return $this->localisationCityId;
-    }
-
-    public function setLocalisationCityId(?Comune $localisationCityId): self
-    {
-        $this->localisationCityId = $localisationCityId;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -197,6 +201,66 @@ class Waste
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getCommune(): ?Comune
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?Comune $commune): self
+    {
+        $this->commune = $commune;
+
+        return $this;
+    }
+
+    public function getLocalisationName(): ?string
+    {
+        return $this->localisationName;
+    }
+
+    public function setLocalisationName(string $localisationName): self
+    {
+        $this->localisationName = $localisationName;
+
+        return $this;
+    }
+
+    public function getLocalisationStreet(): ?string
+    {
+        return $this->localisationStreet;
+    }
+
+    public function setLocalisationStreet(string $localisationStreet): self
+    {
+        $this->localisationStreet = $localisationStreet;
+
+        return $this;
+    }
+
+    public function getLocalisationLatitude(): ?float
+    {
+        return $this->localisationLatitude;
+    }
+
+    public function setLocalisationLatitude(float $localisationLatitude): self
+    {
+        $this->localisationLatitude = $localisationLatitude;
+
+        return $this;
+    }
+
+    public function getLocalisationLongitude(): ?float
+    {
+        return $this->localisationLongitude;
+    }
+
+    public function setLocalisationLongitude(float $localisationLongitude): self
+    {
+        $this->localisationLongitude = $localisationLongitude;
 
         return $this;
     }
