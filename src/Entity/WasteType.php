@@ -69,15 +69,11 @@ class WasteType
     #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Waste::class)]
     private Collection $wastes;
 
-    #[ORM\OneToMany(mappedBy: 'wasteType', targetEntity: Passage::class)]
-    private Collection $passages;
-
     public function __construct()
     {
         $this->wastes = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
-        $this->passages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,36 +165,6 @@ class WasteType
             // set the owning side to null (unless already changed)
             if ($waste->getWasteType() === $this) {
                 $waste->setWasteType(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Passage>
-     */
-    public function getPassages(): Collection
-    {
-        return $this->passages;
-    }
-
-    public function addPassage(Passage $passage): self
-    {
-        if (!$this->passages->contains($passage)) {
-            $this->passages->add($passage);
-            $passage->setWasteType($this);
-        }
-
-        return $this;
-    }
-
-    public function removePassage(Passage $passage): self
-    {
-        if ($this->passages->removeElement($passage)) {
-            // set the owning side to null (unless already changed)
-            if ($passage->getWasteType() === $this) {
-                $passage->setWasteType(null);
             }
         }
 

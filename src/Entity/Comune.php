@@ -87,16 +87,17 @@ class Comune
     #[Groups(['commune.read', 'commune.write'])]
     private Collection $secteurs;
 
-    #[ORM\OneToMany(mappedBy: 'commune', targetEntity: Waste::class)]
-    private Collection $wastes;
+    #[ORM\OneToMany(mappedBy: 'localisationCityId', targetEntity: Waste::class)]
+    #[Groups(['commune.read', 'commune.write'])]
+    private Collection $wasteCity;
 
     public function __construct()
     {
         $this->recyclingCenters = new ArrayCollection();
         $this->secteurs = new ArrayCollection();
+        $this->wasteCity = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
-        $this->wastes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,27 +240,27 @@ class Comune
     /**
      * @return Collection<int, Waste>
      */
-    public function getWastes(): Collection
+    public function getWasteCity(): Collection
     {
-        return $this->wastes;
+        return $this->wasteCity;
     }
 
-    public function addWaste(Waste $waste): self
+    public function addWasteCity(Waste $wasteCity): self
     {
-        if (!$this->wastes->contains($waste)) {
-            $this->wastes->add($waste);
-            $waste->setCommune($this);
+        if (!$this->wasteCity->contains($wasteCity)) {
+            $this->wasteCity->add($wasteCity);
+            $wasteCity->setLocalisationCityId($this);
         }
 
         return $this;
     }
 
-    public function removeWaste(Waste $waste): self
+    public function removeWasteCity(Waste $wasteCity): self
     {
-        if ($this->wastes->removeElement($waste)) {
+        if ($this->wasteCity->removeElement($wasteCity)) {
             // set the owning side to null (unless already changed)
-            if ($waste->getCommune() === $this) {
-                $waste->setCommune(null);
+            if ($wasteCity->getLocalisationCityId() === $this) {
+                $wasteCity->setLocalisationCityId(null);
             }
         }
 
