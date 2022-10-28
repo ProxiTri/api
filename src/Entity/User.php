@@ -27,28 +27,33 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['user.read']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN") or object == user'
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['user.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN") or object == user'
         ],
-        'delete'
-    ]
+        'delete' => [
+            'method' => 'DELETE',
+            'security' => 'is_granted("ROLE_ADMIN")'
+        ]
+    ],denormalizationContext: ['groups' => ['user.write']], normalizationContext: ['groups' => ['user.read']]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user.read'])]
+    #[Groups(['user.read', 'chat.read', 'report.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
     #[Assert\NotBlank(message: 'L\'email est obligatoire')]
     #[Assert\Email(
         message: 'L\'email {{ value }} n\'est pas valide.'
@@ -72,11 +77,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(nullable: true)]
@@ -84,11 +89,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $age = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
     private ?string $imgProfile = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
     private ?bool $isBan = null;
 
     #[ORM\Column]

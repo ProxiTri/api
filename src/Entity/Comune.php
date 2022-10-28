@@ -37,38 +37,40 @@ use Symfony\Component\Validator\Constraints as Assert;
             'path' => '/communes/{id}',
             'normalization_context' => [
                 'groups' => ['commune.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN")'
         ],
         'delete' => [
             'method' => 'DELETE',
-            'path' => '/communes/{id}'
+            'path' => '/communes/{id}',
+            'security' => 'is_granted("ROLE_ADMIN")'
         ]
-    ]
+    ],denormalizationContext: ['groups' => ['commune.write']], normalizationContext: ['groups' => ['commune.read']]
 )]
 class Comune
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['commune.read'])]
+    #[Groups(['commune.read', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
+    #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
+    #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     private ?int $localisationPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
+    #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     private ?string $localisationCountry = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['commune.read', 'commune.write'])]
+    #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     private ?int $localisationTownId = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

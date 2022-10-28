@@ -32,35 +32,39 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['wastecontainermodel.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN")'
         ],
-        'delete'
-    ]
+        'delete' => [
+            'method' => 'DELETE',
+            'security' => 'is_granted("ROLE_ADMIN")'
+        ]
+    ],denormalizationContext: ['groups' => ['wastecontainermodel.write']], normalizationContext: ['groups' => ['wastecontainermodel.read']]
 )]
 class WasteContainerModel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['wastecontainermodel.read'])]
+    #[Groups(['wastecontainermodel.read', 'waste.read', 'passage.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $modelName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
     private ?string $modelManuFacturer = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
     private ?int $modelUsefulCapacity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write'])]
+    #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
     private ?string $modelType = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

@@ -32,30 +32,34 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['wastetype.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN")'
         ],
-        'delete'
-    ]
+        'delete' => [
+            'method' => 'DELETE',
+            'security' => 'is_granted("ROLE_ADMIN")'
+        ]
+    ],denormalizationContext: ['groups' => ['wastetype.write']], normalizationContext: ['groups' => ['wastetype.read']]
 )]
 class WasteType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
+    #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
+    #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
     private ?string $designation = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
+    #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
     private ?float $density = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['wastetype.read', 'wastetype.write'])]
+    #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
     private ?string $customerDesignation = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

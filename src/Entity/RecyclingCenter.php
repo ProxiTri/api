@@ -30,10 +30,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['recyclingcenter.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN")'
         ],
-        'delete'
-    ]
+        'delete' => [
+            'method' => 'DELETE',
+            'security' => 'is_granted("ROLE_ADMIN")'
+        ]
+    ],denormalizationContext: ['groups' => ['recyclingcenter.write']], normalizationContext: ['groups' => ['recyclingcenter.read']]
 )]
 class RecyclingCenter
 {

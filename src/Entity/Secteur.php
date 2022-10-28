@@ -32,27 +32,31 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['secteur.write']
-            ]
+            ],
+            'security' => 'is_granted("ROLE_ADMIN")'
         ],
-        'delete'
-    ]
+        'delete' => [
+            'method' => 'DELETE',
+            'security' => 'is_granted("ROLE_ADMIN")'
+        ]
+    ],denormalizationContext: ['groups' => ['secteur.write']], normalizationContext: ['groups' => ['secteur.read']]
 )]
 class Secteur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['secteur.read'])]
+    #[Groups(['secteur.read', 'passage.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write'])]
+    #[Groups(['secteur.read', 'secteur.write', 'passage.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'secteurs')]
-    #[Groups(['secteur.read', 'secteur.write'])]
+    #[Groups(['secteur.read', 'secteur.write', 'passage.read'])]
     #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
