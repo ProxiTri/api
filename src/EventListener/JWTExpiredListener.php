@@ -16,6 +16,6 @@ class JWTExpiredListener {
         $response = $event->getResponse();
         $event->getResponse()->getExpires();
 
-        $response->setMessage('Votre token a expiré le ' . $response->getExpires()->format('d/m/Y à H:i:s') . '. Veuillez vous reconnecter pour obtenir un nouveau token');
+        $response->setMessage('Votre token a expiré le ' . $response->getExpires()->format('d/m/Y H:i:s') . '. Veuillez vous reconnecter pour obtenir un nouveau token');
     }
 }
