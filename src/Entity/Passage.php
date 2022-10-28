@@ -54,6 +54,12 @@ class Passage
     #[Assert\NotBlank(message: 'Le secteur est obligatoire')]
     private ?Secteur $secteur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'passages')]
+    private ?WasteType $wasteType = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $dayBefore = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +85,30 @@ class Passage
     public function setSecteurId(?Secteur $secteur): self
     {
         $this->secteur = $secteur;
+
+        return $this;
+    }
+
+    public function getWasteType(): ?WasteType
+    {
+        return $this->wasteType;
+    }
+
+    public function setWasteType(?WasteType $wasteType): self
+    {
+        $this->wasteType = $wasteType;
+
+        return $this;
+    }
+
+    public function getDayBefore(): ?string
+    {
+        return $this->dayBefore;
+    }
+
+    public function setDayBefore(?string $dayBefore): self
+    {
+        $this->dayBefore = $dayBefore;
 
         return $this;
     }
