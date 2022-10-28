@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,6 +16,12 @@ class ApiLoginController extends AbstractController
     public function index(#[CurrentUser] ?User $user, Request $request, UserRepository $userRepository, ManagerRegistry $doctrine): Response
     {
 
+        if (!$request->get('email') || !$request->get('password')) {
+            return new JsonResponse([
+                'statusCode' => 400,
+                'message' => 'Veuillez fournir un "username" et un "password"'
+            ], 400);
+        }
         $email = $request->get('email');
         $password = $request->get('password');
         $user = $userRepository->findBy(['email' => $email]);
