@@ -1,4 +1,6 @@
 api_platform:
+    defaults:
+        pagination_enabled: false
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
@@ -20,7 +22,7 @@ api_platform:
     description: 'Une API pour Proxitri et développée par Proxitri'
 
     # The version of the API.
-    version: '1.1.0'
+    version: '2.0.0'
 
     openapi:
         # The contact information for the exposed API.
