@@ -10,7 +10,7 @@ class JWTCreatedListener {
     /**
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * @param RequestStack $requestStack
@@ -25,15 +25,18 @@ class JWTCreatedListener {
      *
      * @return void
      */
-    public function onJWTCreated(JWTCreatedEvent $event)
+    public function onJWTCreated(JWTCreatedEvent $event): void
     {
         $request = $this->requestStack->getCurrentRequest();
 
+
+        $expiration = new \DateTime('+1 day');
         $user = $event->getUser();
         $payload       = $event->getData();
         $payload['roles'] = $user->getRoles();
         $payload['ip'] = $request->getClientIp();
         $payload['userId'] = $user->getId();
+        $payload['exp'] = $expiration->getTimestamp();
 
         $event->setData($payload);
 
