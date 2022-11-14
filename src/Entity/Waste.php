@@ -17,7 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/wastes/add'
+            'path' => '/wastes/add',
+            'normalization_context' => [
+                'groups' => ['waste.write']
+            ],
         ]
     ],
     itemOperations: [
@@ -68,12 +71,12 @@ class Waste
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
-    #[Assert\DateTime]
+    #[Assert\Type(type: \DateTimeInterface::class, message: 'La date doit être au format YYYY-MM-DD')]
     private ?\DateTimeInterface $installFirstDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['waste.read', 'waste.write'])]
-    #[Assert\DateTime]
+    #[Assert\Type(type: \DateTimeInterface::class, message: 'La date doit être au format YYYY-MM-DD')]
     private ?\DateTimeInterface $installNewDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'wastes')]

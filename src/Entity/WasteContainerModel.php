@@ -53,18 +53,25 @@ class WasteContainerModel
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(max: 255, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères')]
+    #[Assert\Type(type: 'string', message: 'Le nom doit être une chaîne de caractères')]
     private ?string $modelName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
+    #[Assert\Length(max: 255, maxMessage: 'Le manuFacturer ne peut pas dépasser {{ limit }} caractères')]
+    #[Assert\Type(type: 'string', message: 'Le manuFacturer doit être une chaîne de caractères')]
     private ?string $modelManuFacturer = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
+    #[Assert\Type(type: 'integer', message: 'La capacité doit être un entier')]
     private ?int $modelUsefulCapacity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['wastecontainermodel.read', 'wastecontainermodel.write', 'waste.read', 'passage.read'])]
+    #[Assert\Length(max: 255, maxMessage: 'Le type de modèle ne peut pas dépasser {{ limit }} caractères')]
+    #[Assert\Type(type: 'string', message: 'Le type de modèle doit être une chaîne de caractères')]
     private ?string $modelType = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

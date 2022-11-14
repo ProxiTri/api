@@ -55,6 +55,9 @@ class Report
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['report.read', 'report.write'])]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(min: 3, max: 255, minMessage: 'Le nom doit faire au moins 3 caractères', maxMessage: 'Le nom doit faire au plus 255 caractères')]
+    #[Assert\Type(type: 'string', message: 'Le nom doit être une chaîne de caractères')]
     private ?string $localisationName = null;
 
     #[ORM\Column(length: 255, nullable: true)]

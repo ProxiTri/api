@@ -56,6 +56,13 @@ class RecyclingCenter
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom doit faire au plus {{ limit }} caractères'
+    )]
+    #[Assert\Type(type: 'string', message: 'Le nom doit être une chaîne de caractères')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -64,10 +71,12 @@ class RecyclingCenter
 
     #[ORM\Column(nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\Type(type: 'float', message: 'La latitude doit être un nombre')]
     private ?float $latitude = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Assert\Type(type: 'float', message: 'La latitude doit être un nombre')]
     private ?float $longitude = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

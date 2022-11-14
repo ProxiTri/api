@@ -52,14 +52,20 @@ class WasteType
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
+    #[Assert\NotBlank(message: 'La désignation est obligatoire')]
+    #[Assert\Length(max: 255, maxMessage: 'La désignation ne doit pas dépasser {{ limit }} caractères')]
+    #[Assert\Type(type: 'string', message: 'La désignation doit être une chaîne de caractères')]
     private ?string $designation = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
+    #[Assert\Type(type: 'float', message: 'La densité doit être un nombre')]
     private ?float $density = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['wastetype.read', 'wastetype.write', 'waste.read', 'passage.read'])]
+    #[Assert\Length(max: 255, maxMessage: 'La désignation personnalisée ne doit pas dépasser {{ limit }} caractères')]
+    #[Assert\Type(type: 'string', message: 'La désignation personnalisée doit être une chaîne de caractères')]
     private ?string $customerDesignation = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

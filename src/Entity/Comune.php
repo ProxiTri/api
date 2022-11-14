@@ -15,26 +15,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ComuneRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET' => [
-          'method' => 'GET',
-          'path' => '/communes'
-        ],
+        'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/communes/add'
+            'path' => '/comunes/add'
         ]
     ],
     itemOperations: [
         'GET' => [
             'method' => 'GET',
-            'path' => '/communes/{id}',
+            'path' => '/comunes/{id}',
             'normalization_context' => [
                 'groups' => ['commune.read']
             ]
         ],
         'PUT' => [
             'method' => 'PUT',
-            'path' => '/communes/{id}',
+            'path' => '/comunes/{id}',
             'normalization_context' => [
                 'groups' => ['commune.write']
             ],
@@ -42,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
         'delete' => [
             'method' => 'DELETE',
-            'path' => '/communes/{id}',
+            'path' => '/comunes/{id}',
             'security' => 'is_granted("ROLE_ADMIN")'
         ]
     ],denormalizationContext: ['groups' => ['commune.write']], normalizationContext: ['groups' => ['commune.read']]
@@ -59,18 +56,37 @@ class Comune
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom doit faire au plus {{ limit }} caractères'
+    )]
+    #[Assert\Type(type: 'string', message: 'Le nom doit être une chaîne de caractères')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
+    #[Assert\NotBlank(message: 'Le code postal est obligatoire')]
+    #[Assert\Length(
+        min: 5,
+        max: 5,
+        minMessage: 'Le code postal doit faire {{ limit }} caractères',
+        maxMessage: 'Le code postal doit faire {{ limit }} caractères'
+    )]
+    #[Assert\Type(type: 'integer', message: 'Le code postal doit être un nombre entier')]
+    #[Assert\Regex(pattern: '/^[0-9]+$/', message: 'Le code postal doit être un nombre entier')]
     private ?int $localisationPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
+    #[Assert\NotBlank(message: 'La pays est obligatoire')]
+    #[Assert\Type(type: 'string', message: 'La pays doit être une chaîne de caractères')]
     private ?string $localisationCountry = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['commune.read', 'commune.write', 'recyclingcenter.read', 'secteur.read', 'waste.read', 'passage.read'])]
+    #[Assert\Type(type: 'integer', message: 'L\'identifiant de la ville doit être un nombre entier')]
     private ?int $localisationTownId = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
