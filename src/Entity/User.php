@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user.read', 'chat.read', 'report.read'])]
+    #[Groups(['user.read', 'chat.read', 'report.read', 'chat.write'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
@@ -78,22 +78,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le prénom doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le prénom ne peut pas contenir plus de {{ limit }} caractères.'
+    )]
+    #[Assert\Type(
+        type: 'string',
+        message: 'Le prénom {{ value }} n\'est pas valide.'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le nom ne peut pas contenir plus de {{ limit }} caractères.'
+    )]
+    #[Assert\Type(
+        type: 'string',
+        message: 'Le nom {{ value }} n\'est pas valide.'
+    )]
     private ?string $firstName = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['user.read', 'user.write'])]
+    #[Assert\Type(type: 'integer', message: 'L\'âge {{ value }} n\'est pas valide.')]
     private ?int $age = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
+    #[Assert\Type(
+        type: 'string',
+        message: 'L\'image de profil {{ value }} n\'est pas valide.'
+    )]
     private ?string $imgProfile = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['user.read', 'user.write', 'chat.read', 'report.read'])]
+    #[Assert\Type(type: 'boolean', message: 'Le isBan {{ value }} n\'est pas valide.')]
     private ?bool $isBan = null;
 
     #[ORM\Column]

@@ -51,6 +51,7 @@ class Passage
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['passage.read', 'passage.write'])]
     #[Assert\NotBlank(message: 'L\'heure de passage est obligatoire')]
+    #[Assert\Type(type: 'string', message: 'L\'heure de passage doit être une chaîne de caractères')]
     private ?string $hours = null;
 
     #[ORM\ManyToOne(inversedBy: 'passages')]

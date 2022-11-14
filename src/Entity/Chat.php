@@ -17,7 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/chats/add'
+            'path' => '/chats/add',
+            'normalization_context' => [
+                'groups' => ['chat.write']
+            ],
         ]
     ],
     itemOperations: [
@@ -60,6 +63,7 @@ class Chat
     private ?string $message = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['chat.read', 'chat.write'])]
     private ?bool $is_report = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
@@ -69,6 +73,12 @@ class Chat
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups(['chat.read'])]
     private ?\DateTimeImmutable $updated_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
