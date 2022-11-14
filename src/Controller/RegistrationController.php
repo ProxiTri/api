@@ -72,6 +72,9 @@ class RegistrationController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return new JsonResponse("Compte crée avec succès ! ID du compte : " . $user->getUserIdentifier(), 201);
+        return new JsonResponse([
+            'statusCode' => 201,
+            'message' => "Compte crée avec succès ! ID du compte : " . $user->getUserIdentifier()
+        ], 201);
     }
 }
