@@ -1,6 +1,14 @@
 api_platform:
+    defaults:
+        pagination_enabled: false
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
+    formats:
+        jsonld: ['application/ld+json']
+        jsonhal: ['application/hal+json']
+        jsonapi: ['application/vnd.api+json']
+        json: ['application/json']
+        html: ['text/html']
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:
