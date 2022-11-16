@@ -14,13 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ChatRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'normalization_context' => ['groups' => ['chat:read']]
+        ],
         'POST' => [
             'method' => 'POST',
             'path' => '/chats/add',
-            'normalization_context' => [
-                'groups' => ['chat.write']
-            ],
         ]
     ],
     itemOperations: [
@@ -41,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'DELETE',
             'security' => 'is_granted("ROLE_ADMIN")'
         ]
-    ],denormalizationContext: ['groups' => ['chat.write']], normalizationContext: ['groups' => ['chat.read']]
+    ], normalizationContext: ['groups' => ['chat.read']]
 )]
 class Chat
 {
