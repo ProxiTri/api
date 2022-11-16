@@ -19,7 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'GET',
         'POST' => [
             'method' => 'POST',
-            'path' => '/users/add'
+            'path' => '/users/add',
+            'normalization_context' => [
+                'groups' => ['user.write']
+            ],
         ]
     ],
     itemOperations: [
