@@ -46,17 +46,17 @@ class Secteur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['secteur.read', 'passage.read'])]
+    #[Groups(['secteur.read', 'passage.read', 'commune.read'])]
     #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['secteur.read', 'secteur.write', 'passage.read'])]
+    #[Groups(['secteur.read', 'secteur.write', 'passage.read', 'commune.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'secteurs')]
-    #[Groups(['secteur.read', 'secteur.write', 'passage.read'])]
+    #[Groups(['secteur.read', 'secteur.write', 'passage.read', 'commune.read'])]
     #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
@@ -69,7 +69,7 @@ class Secteur
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\OneToMany(mappedBy: 'secteurs', targetEntity: Passage::class)]
-    #[Groups(['secteur.read', 'secteur.write'])]
+    #[Groups(['secteur.read', 'secteur.write', 'comune.read'])]
     private Collection $passages;
 
     public function __construct()
