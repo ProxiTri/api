@@ -49,12 +49,12 @@ class RecyclingCenter
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'recyclingCenters')]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Groups(['recyclingcenter.read', 'recyclingcenter.write', 'commune.read'])]
     #[Assert\NotBlank(message: 'La commune est obligatoire')]
     private ?Comune $comune = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Groups(['recyclingcenter.read', 'recyclingcenter.write', 'commune.read'])]
     #[Assert\NotBlank(message: 'Le nom est obligatoire')]
     #[Assert\Length(
         min: 3,
@@ -66,16 +66,16 @@ class RecyclingCenter
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Groups(['recyclingcenter.read', 'recyclingcenter.write', 'commune.read'])]
     private ?string $business_hours = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Groups(['recyclingcenter.read', 'recyclingcenter.write', 'commune.read'])]
     #[Assert\Type(type: 'float', message: 'La latitude doit être un nombre')]
     private ?float $latitude = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['recyclingcenter.read', 'recyclingcenter.write'])]
+    #[Groups(['recyclingcenter.read', 'recyclingcenter.write', 'commune.read'])]
     #[Assert\Type(type: 'float', message: 'La latitude doit être un nombre')]
     private ?float $longitude = null;
 
