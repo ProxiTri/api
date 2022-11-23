@@ -49,20 +49,22 @@ class Passage
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['passage.read', 'passage.write'])]
+    #[Groups(['passage.read', 'passage.write', 'comune.read'])]
     #[Assert\NotBlank(message: 'L\'heure de passage est obligatoire')]
     #[Assert\Type(type: 'string', message: 'L\'heure de passage doit être une chaîne de caractères')]
     private ?string $hours = null;
 
     #[ORM\ManyToOne(inversedBy: 'passages')]
-    #[Groups(['passage.read', 'passage.write'])]
+    #[Groups(['passage.read', 'passage.write', 'comune.read'])]
     #[Assert\NotBlank(message: 'Le secteur est obligatoire')]
     private ?Secteur $secteur = null;
 
     #[ORM\ManyToOne(inversedBy: 'passages')]
+    #[Groups(['passage.read', 'comune.read'])]
     private ?WasteType $wasteType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['passage.read', 'comune.read'])]
     private ?string $dayBefore = null;
 
     public function getId(): ?int
