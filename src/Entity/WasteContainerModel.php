@@ -15,10 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: WasteContainerModelRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les modèles de poubelles', 'description' => 'Récupérer tous les modèles de poubelles', 'tags' => ['Modèle de poubelle']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/waste_container_models/add'
+            'path' => '/waste_container_models/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau modèle de poubelle', 'description' => 'Ajouter un nouveau modèle de poubelle', 'tags' => ['Modèle de poubelle']],
         ]
     ],
     itemOperations: [
@@ -26,18 +29,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['wastecontainermodel.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un modèle de poubelle', 'description' => 'Récupérer un modèle de poubelle', 'tags' => ['Modèle de poubelle']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['wastecontainermodel.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un modèle de poubelle', 'description' => 'Modifier un modèle de poubelle', 'tags' => ['Modèle de poubelle']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un modèle de poubelle', 'description' => 'Supprimer un modèle de poubelle', 'tags' => ['Modèle de poubelle']],
         ]
     ],denormalizationContext: ['groups' => ['wastecontainermodel.write']], normalizationContext: ['groups' => ['wastecontainermodel.read']]
 )]

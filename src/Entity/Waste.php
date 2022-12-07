@@ -14,13 +14,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: WasteRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les déchets', 'description' => 'Récupérer tous les déchets', 'tags' => ['Déchet']],
+        ],
         'POST' => [
             'method' => 'POST',
             'path' => '/wastes/add',
             'normalization_context' => [
                 'groups' => ['waste.write']
             ],
+            'openapi_context' => ['summary' => 'Ajouter un nouveau déchet', 'description' => 'Ajouter un nouveau déchet', 'tags' => ['Déchet']],
         ]
     ],
     itemOperations: [
@@ -28,18 +31,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['waste.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un déchet', 'description' => 'Récupérer un déchet', 'tags' => ['Déchet']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['waste.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un déchet', 'description' => 'Modifier un déchet', 'tags' => ['Déchet']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un déchet', 'description' => 'Supprimer un déchet', 'tags' => ['Déchet']],
         ]
     ], denormalizationContext: ['groups' => ['waste.write']], normalizationContext: ['groups' => ['waste.read']]
 )]

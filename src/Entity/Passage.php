@@ -13,10 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: PassageRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les passages', 'description' => 'Récupérer tous les passages', 'tags' => ['Passage']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/passages/add'
+            'path' => '/passages/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau passage', 'description' => 'Ajouter un nouveau passage', 'tags' => ['Passage']],
         ]
     ],
     itemOperations: [
@@ -24,18 +27,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['passage.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un passage', 'description' => 'Récupérer un passage', 'tags' => ['Passage']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['passage.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un passage', 'description' => 'Modifier un passage', 'tags' => ['Passage']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un passage', 'description' => 'Supprimer un passage', 'tags' => ['Passage']],
         ]
     ], denormalizationContext: ['groups' => ['passage.write']], normalizationContext: ['groups' => ['passage.read']]
 )]

@@ -13,10 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: RecyclingCenterRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les centres de recyclage', 'description' => 'Récupérer tous les centres de recyclage', 'tags' => ['Centre de recyclage']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/recycling_centers/add'
+            'path' => '/recycling_centers/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau centre de recyclage', 'description' => 'Ajouter un nouveau centre de recyclage', 'tags' => ['Centre de recyclage']],
         ]
     ],
     itemOperations: [
@@ -24,18 +27,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['recyclingcenter.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un centre de recyclage', 'description' => 'Récupérer un centre de recyclage', 'tags' => ['Centre de recyclage']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['recyclingcenter.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un centre de recyclage', 'description' => 'Modifier un centre de recyclage', 'tags' => ['Centre de recyclage']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un centre de recyclage', 'description' => 'Supprimer un centre de recyclage', 'tags' => ['Centre de recyclage']],
         ]
     ],denormalizationContext: ['groups' => ['recyclingcenter.write']], normalizationContext: ['groups' => ['recyclingcenter.read']]
 )]

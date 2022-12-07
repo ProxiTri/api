@@ -15,10 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ComuneRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer toutes les communes', 'description' => 'Récupérer tous les communes', 'tags' => ['Commune']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/comunes/add'
+            'path' => '/comunes/add',
+            'openapi_context' => ['summary' => 'Ajouter une nouvelle commune', 'description' => 'Ajouter une nouvelle commune', 'tags' => ['Commune']],
         ]
     ],
     itemOperations: [
@@ -27,7 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'path' => '/comunes/{id}',
             'normalization_context' => [
                 'groups' => ['commune.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer une commune', 'description' => 'Récupérer une commune', 'tags' => ['Commune']],
         ],
         'PUT' => [
             'method' => 'PUT',
@@ -35,12 +39,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             'normalization_context' => [
                 'groups' => ['commune.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier une commune', 'description' => 'Modifier une commune', 'tags' => ['Commune']],
         ],
         'delete' => [
             'method' => 'DELETE',
             'path' => '/comunes/{id}',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer une commune', 'description' => 'Supprimer une commune', 'tags' => ['Commune']],
         ]
     ],denormalizationContext: ['groups' => ['commune.write']], normalizationContext: ['groups' => ['commune.read']]
 )]
