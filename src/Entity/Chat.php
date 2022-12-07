@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
         'GET' => [
             'openapi_context' => ['summary' => 'Récupérer tous les chats', 'description' => 'Récupérer tous les chats', 'tags' => ['Chat']],
+            'normalization_context' => ['groups' => ['chat:read']]
         ],
         'POST' => [
             'method' => 'POST',
@@ -47,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => 'is_granted("ROLE_ADMIN")',
             'openapi_context' => ['summary' => 'Supprimer un chat', 'description' => 'Supprimer un chat', 'tags' => ['Chat']],
         ]
-    ],denormalizationContext: ['groups' => ['chat.write']], normalizationContext: ['groups' => ['chat.read']]
+    ], normalizationContext: ['groups' => ['chat.read']]
 )]
 class Chat
 {

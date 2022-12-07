@@ -23,6 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'POST',
             'path' => '/users/add',
             'openapi_context' => ['summary' => 'Ajouter un nouvel utilisateur', 'description' => 'Ajouter un nouvel utilisateur', 'tags' => ['Utilisateur']],
+            'normalization_context' => [
+                'groups' => ['user.write']
+            ],
         ]
     ],
     itemOperations: [
