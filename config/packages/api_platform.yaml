@@ -28,17 +28,17 @@ api_platform:
     description: 'Une API pour Proxitri et développée par Proxitri'
 
     # The version of the API.
-    version: '1.1.0'
+    version: '1.2.0'
 
     openapi:
         # The contact information for the exposed API.
         contact:
             # The identifying name of the contact person/organization.
-            name:
+            name: 'Proxitri'
             # The URL pointing to the contact information. MUST be in the format of a URL.
-            url:
+            url: 'https://proxitri.alexis-briet.fr'
             # The email address of the contact person/organization. MUST be in the format of an email address.
-            email:
+            email: 'contact@proxitri.alexis-briet.fr'
         # A URL to the Terms of Service for the API. MUST be in the format of a URL.
         termsOfService:
         # The license information for the exposed API.

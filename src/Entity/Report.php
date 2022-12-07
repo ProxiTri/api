@@ -13,10 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les chats', 'description' => 'Récupérer tous les chats', 'tags' => ['Report']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/reports/add'
+            'path' => '/reports/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau chat', 'description' => 'Ajouter un nouveau chat', 'tags' => ['Report']],
         ]
     ],
     itemOperations: [
@@ -24,18 +27,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['report.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un chat', 'description' => 'Récupérer un chat', 'tags' => ['Report']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['report.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un chat', 'description' => 'Modifier un chat', 'tags' => ['Report']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un chat', 'description' => 'Supprimer un chat', 'tags' => ['Report']],
         ]
     ],denormalizationContext: ['groups' => ['report.write']], normalizationContext: ['groups' => ['report.read']]
 )]

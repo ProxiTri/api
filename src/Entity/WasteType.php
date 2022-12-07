@@ -15,10 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: WasteTypeRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les types de déchets', 'description' => 'Récupérer tous les types de déchets', 'tags' => ['Type de déchets']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/waste_types/add'
+            'path' => '/waste_types/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau type de déchet', 'description' => 'Ajouter un nouveau type de déchet', 'tags' => ['Type de déchets']],
         ]
     ],
     itemOperations: [
@@ -26,18 +29,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['wastetype.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un type de déchet', 'description' => 'Récupérer un type de déchet', 'tags' => ['Type de déchets']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['wastetype.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un type de déchet', 'description' => 'Modifier un type de déchet', 'tags' => ['Type de déchets']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un type de déchet', 'description' => 'Supprimer un type de déchet', 'tags' => ['Type de déchets']],
         ]
     ],denormalizationContext: ['groups' => ['wastetype.write']], normalizationContext: ['groups' => ['wastetype.read']]
 )]

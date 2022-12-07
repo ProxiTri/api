@@ -16,10 +16,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les utilisateurs', 'description' => 'Récupérer tous les utilisateurs', 'tags' => ['Utilisateur']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/users/add'
+            'path' => '/users/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouvel utilisateur', 'description' => 'Ajouter un nouvel utilisateur', 'tags' => ['Utilisateur']],
         ]
     ],
     itemOperations: [
@@ -28,18 +31,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'normalization_context' => [
                 'groups' => ['user.read']
             ],
-            'security' => 'is_granted("ROLE_ADMIN") or object == user'
+            'security' => 'is_granted("ROLE_ADMIN") or object == user',
+            'openapi_context' => ['summary' => 'Récupérer un utilisateur', 'description' => 'Récupérer un utilisateur', 'tags' => ['Utilisateur']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['user.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN") or object == user'
+            'security' => 'is_granted("ROLE_ADMIN") or object == user',
+            'openapi_context' => ['summary' => 'Modifier un utilisateur', 'description' => 'Modifier un utilisateur', 'tags' => ['Utilisateur']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un utilisateur', 'description' => 'Supprimer un utilisateur', 'tags' => ['Utilisateur']],
         ]
     ],denormalizationContext: ['groups' => ['user.write']], normalizationContext: ['groups' => ['user.read']]
 )]

@@ -15,10 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'openapi_context' => ['summary' => 'Récupérer tous les secteurs', 'description' => 'Récupérer tous les secteurs', 'tags' => ['Secteur']],
+        ],
         'POST' => [
             'method' => 'POST',
-            'path' => '/secteurs/add'
+            'path' => '/secteurs/add',
+            'openapi_context' => ['summary' => 'Ajouter un nouveau secteur', 'description' => 'Ajouter un nouveau secteur', 'tags' => ['Secteur']],
         ]
     ],
     itemOperations: [
@@ -26,18 +29,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             'method' => 'GET',
             'normalization_context' => [
                 'groups' => ['secteur.read']
-            ]
+            ],
+            'openapi_context' => ['summary' => 'Récupérer un secteur', 'description' => 'Récupérer un secteur', 'tags' => ['Secteur']],
         ],
         'PUT' => [
             'method' => 'PUT',
             'normalization_context' => [
                 'groups' => ['secteur.write']
             ],
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Modifier un secteur', 'description' => 'Modifier un secteur', 'tags' => ['Secteur']],
         ],
         'delete' => [
             'method' => 'DELETE',
-            'security' => 'is_granted("ROLE_ADMIN")'
+            'security' => 'is_granted("ROLE_ADMIN")',
+            'openapi_context' => ['summary' => 'Supprimer un secteur', 'description' => 'Supprimer un secteur', 'tags' => ['Secteur']],
         ]
     ],denormalizationContext: ['groups' => ['secteur.write']], normalizationContext: ['groups' => ['secteur.read']]
 )]
