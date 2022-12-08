@@ -19,6 +19,15 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $users = [
+            [
+                $_ENV['ADMIN_EMAIL'], $_ENV['ADMIN_PASSWORD']
+            ],
+            [
+                $_ENV['USER_EMAIL'], $_ENV['USER_PASSWORD']
+            ]
+        ];
+
         $user = new User();
         $user->setEmail($_ENV['ADMIN_EMAIL']);
         $hashedPassword = $this->userPasswordHasherInterface->hashPassword(
@@ -33,6 +42,8 @@ class UserFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
+
+
         $user2 = new User();
         $user2->setEmail($_ENV['ADMIN_EMAIL']. 'test');
         $hashedPassword = $this->userPasswordHasherInterface->hashPassword(
@@ -45,6 +56,22 @@ class UserFixtures extends Fixture
         $user2->setUpdatedAt(new \DateTimeImmutable());
 
         $manager->persist($user2);
+        $manager->flush();
+
+
+
+        $user3 = new User();
+        $user3->setEmail($_ENV['USER_EMAIL']);
+        $hashedPassword = $this->userPasswordHasherInterface->hashPassword(
+            $user3,
+            $_ENV['USER_PASSWORD']
+        );
+        $user3->setPassword($hashedPassword);
+        $user3->setRoles(['ROLE_USER']);
+        $user3->setCreatedAt(new \DateTimeImmutable());
+        $user3->setUpdatedAt(new \DateTimeImmutable());
+
+        $manager->persist($user3);
         $manager->flush();
     }
 }
