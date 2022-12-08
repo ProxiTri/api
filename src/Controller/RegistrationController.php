@@ -40,8 +40,15 @@ class RegistrationController extends AbstractController
                 'message' => 'Les champs email et password sont obligatoires'
             ], 400);
         }
-
         $user->setEmail($data['email']);
+
+        if (!empty($data['lastname'])) {
+            $user->setName($data['lastname']);
+        }
+        if (!empty($data['name'])) {
+            $user->setFirstname($data['name']);
+        }
+
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
             $data['password']
