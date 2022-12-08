@@ -36,6 +36,8 @@ class UserFixtures extends Fixture
         );
         $user->setPassword($hashedPassword);
         $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user->setName('BRIET');
+        $user->setFirstName('Alexis');
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
 
@@ -68,6 +70,8 @@ class UserFixtures extends Fixture
         );
         $user3->setPassword($hashedPassword);
         $user3->setRoles(['ROLE_USER']);
+        $user3->setName('Doe');
+        $user3->setFirstName('John');
         $user3->setCreatedAt(new \DateTimeImmutable());
         $user3->setUpdatedAt(new \DateTimeImmutable());
 
