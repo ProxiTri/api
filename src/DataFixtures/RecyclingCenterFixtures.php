@@ -15,64 +15,64 @@ class RecyclingCenterFixtures extends Fixture implements DependentFixtureInterfa
             [
                 "name" => "Décheterie de CHÂTELAILLON-PLAGE",
                 "localisationCityId" => "39704894",
-                "latitude" => "46.0936336",
-                'longitude' => "-1.099737",
+                "latitude" => "46.093740",
+                'longitude' => "-1.098590",
                 "businessHours" => "Le lundi de 9h à 12h et de 14h à 19h. Du mardi au samedi de 9h à 12h et de 14h à 18h"
             ],
             [
                 "name" => "Décheterie de LAGORD",
                 "localisationCityId" => "39704902",
-                "latitude" => "46.1897065",
-                "longitude" => "-1.1682282",
+                "latitude" => "46.189510",
+                "longitude" => "-1.167140",
                 "businessHours" => "Le lundi de 9h à 12h et de 14h à 19h. Du mardi au samedi de 9h à 12h et de 14h à 18h"
             ],
             [
                 "name" => "Décheterie de SAINT-XANDRE",
                 "localisationCityId" => "39705031",
-                "latitude" => "46.2040993",
-                "longitude" => "-1.0909796",
+                "latitude" => "46.202510",
+                "longitude" => "-1.102620",
                 "businessHours" => "Du mardi au samedi de 9h à 12h et de 14h à 18"
             ],
             [
                 "name" => "Décheterie de SAINT-SOULLE",
                 "localisationCityId" => "39704994",
-                "latitude" => "46.199142",
-                "longitude" => "-1.0537308",
+                "latitude" => "46.167590",
+                "longitude" => "-1.024130",
                 "businessHours" => "Du mardi au samedi de 9h à 12h et de 14h à 18"
             ],
             [
                 "name" => "Décheterie de NIEUL-SUR-MER",
                 "localisationCityId" => "39705027",
-                "latitude" => "46.2043215",
-                "longitude" => "-1.1717355",
+                "latitude" => "46.203030",
+                "longitude" => "-1.170810",
                 "businessHours" => "Du mardi au samedi de 9h à 12h et de 14h à 18"
             ],
             [
                 "name" => "Décheterie de SALLES-SUR-MER",
                 "localisationCityId" => "39705051",
-                "latitude" => "46.1162367",
-                "longitude" => "-1.0385367",
+                "latitude" => "46.167590",
+                "longitude" => "-1.024130",
                 "businessHours" => "Le lundi de 9h à 12h et de 14h à 19h. Du mercredi au samedi de 9h à 12h et de 14h à 18h"
             ],
             [
                 "name" => "Décheterie de SAINT-MÉDARD-D’AUNIS",
                 "localisationCityId" => "39704993",
-                "latitude" => "46.1657944",
-                "longitude" => "-0.9816374",
+                "latitude" => "46.167590",
+                "longitude" => "-1.024130",
                 "businessHours" => "Le lundi de 14h à 19h. Les mardis, mercredis, vendredis et samedis de 9h à 12h et de 14h à 18h"
             ],
             [
                 "name" => "Décheterie de MARSILLY",
                 "localisationCityId" => "39704904",
-                "latitude" => "46.218658",
-                "longitude" => "-1.1352701",
+                "latitude" => "46.224660",
+                "longitude" => "-1.138330",
                 "businessHours" => "Le lundi de 9h à 12h et de 14h à 19h. Les mercredis et samedis de 9h à 12h et de 14h à 18h"
             ],
             [
                 "name" => "Décheterie de PERIGNY : CENTRE DE VALORISATION DES DÉCHETS – CENTRE",
                 "localisationCityId" => "39704907",
-                "latitude" => "46.2187591",
-                "longitude" => "-1.2055501",
+                "latitude" => "46.161700",
+                "longitude" => "-1.114780",
                 "businessHours" => "Ouvert en journée continue. Le lundi de 9h30 à 19h. Du mercredi au samedi de 9h30 à 18h. Fermeture le mardi, le dimanche et les jours fériés."
             ],
         ];
